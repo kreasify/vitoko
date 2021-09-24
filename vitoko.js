@@ -5130,7 +5130,7 @@ document.addEventListener('alpine:init', () => {
             })
         },
         galleries() {
-            const gallery = document.querySelectorAll('.gallery__item img');
+            const gallery = document.querySelectorAll('.gambar-produk img');
             
             if(gallery) {
                 return gallery; 
