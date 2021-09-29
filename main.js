@@ -4786,36 +4786,99 @@ Expression: "${b}"
       adFifth: {},
       nama: 'vitoko',
       init() {
-          const o = async () => {
-              const a = await fetch('https://vitoko.netlify.app/ads/index.json');
-              a.ok || alert(`Something went wrong: ${a.status} - ${a.statusText}`), data = await a.json(), this.products = data.items, this.adFirst = data.items[0], this.adSecond = data.items[1], this.adThird = data.items[2], this.adFourth = data.items[3], this.adFifth = data.items[4]
-          }, n = document.querySelector("#related-item-0"), m = document.querySelector("#related-item-2"), d = document.querySelector("#related-item-4"), e = document.querySelectorAll("#feed-item-4"), f = document.querySelectorAll(".feed-item-8"), g = document.querySelectorAll(".feed-item-12"), b = document.querySelectorAll(".feed-item-16"), i = document.querySelectorAll(".feed-item-20"), j = document.querySelectorAll(".feed-item-24"), k = document.querySelectorAll(".feed-item-28"), l = document.querySelectorAll(".feed-item-32"), c = document.querySelectorAll(".feed-item-36"), h = document.querySelectorAll(".feed-item-40");
-          let a;
-          if (e)
-              for (a = 0; a < e.length; a++) this.adFirst(e[a]);
-          if (f)
-              for (a = 0; a < f.length; a++) this.adSecond(f[a]);
-          if (g)
-              for (a = 0; a < g.length; a++) this.adThird(g[a]);
-          if (b)
-              for (a = 0; a < b.length; a++) this.adFourth(b[a]);
-          if (i)
-              for (a = 0; a < i.length; a++) this.adFifth(i[a]);
-          if (j)
-              for (a = 0; a < j.length; a++) this.adFirst(j[a]);
-          if (k)
-              for (a = 0; a < k.length; a++) this.adSecond(k[a]);
-          if (l)
-              for (a = 0; a < l.length; a++) this.adThird(l[a]);
-          if (c)
-              for (a = 0; a < c.length; a++) this.adFourth(c[a]);
-          if (h)
-              for (a = 0; a < h.length; a++) this.adFifth(h[a]);
-          return n && this.adFirst(n), m && this.adSecond(m), d && (this.adThird(d), this.adFourth(d)), o
+          const getProducts = async () => {
+              const response = await fetch('https://vitoko.netlify.app/ads/index.json')
+              if (! response.ok) alert(`Something went wrong: ${response.status} - ${response.statusText}`)
+              data = await response.json();
+              this.products = data.items;
+              this.adFirst = data.items[0];
+              this.adSecond = data.items[1];
+              this.adThird = data.items[2];
+              this.adFourth = data.items[3];
+              this.adFifth = data.items[4];
+          };
+          const wrapper_0 = document.querySelector("#related-item-0");
+          const wrapper_1 = document.querySelector(".related-item-2");
+          const wrapper_2 = document.querySelector(".related-item-4");
+          const feed_1 = document.querySelectorAll(".feed-item-4");
+          const feed_2 = document.querySelectorAll(".feed-item-8");
+          const feed_3 = document.querySelectorAll(".feed-item-12");
+          const feed_4 = document.querySelectorAll(".feed-item-16");
+          const feed_5 = document.querySelectorAll(".feed-item-20");
+          const feed_6 = document.querySelectorAll(".feed-item-24");
+          const feed_7 = document.querySelectorAll(".feed-item-28");
+          const feed_8 = document.querySelectorAll(".feed-item-32");
+          const feed_9 = document.querySelectorAll(".feed-item-36");
+          const feed_10 = document.querySelectorAll(".feed-item-40");
+          let i;
+
+          if (feed_1) {
+              for (i = 0; i < feed_1.length; i++) {
+                  this.adFirst(feed_1[i]);
+              }
+          }
+          if (feed_2) {
+              for (i = 0; i < feed_2.length; i++) {
+                  this.adSecond(feed_2[i]);
+              }
+          }
+          if (feed_3) {
+              for (i = 0; i < feed_3.length; i++) {
+                  this.adThird(feed_3[i]);
+              }
+          }
+          if (feed_4) {
+              for (i = 0; i < feed_4.length; i++) {
+                  this.adFourth(feed_4[i]);
+              }
+          }
+          if (feed_5) {
+              for (i = 0; i < feed_5.length; i++) {
+                  this.adFifth(feed_5[i]);
+              }
+          }
+          if (feed_6) {
+              for (i = 0; i < feed_6.length; i++) {
+                  this.adFirst(feed_6[i]);
+              }
+          }
+          if (feed_7) {
+              for (i = 0; i < feed_7.length; i++) {
+                  this.adSecond(feed_7[i]);
+              }
+          }
+          if (feed_8) {
+              for (i = 0; i < feed_8.length; i++) {
+                  this.adThird(feed_8[i]);
+              }
+          }
+          if (feed_9) {
+              for (i = 0; i < feed_9.length; i++) {
+                  this.adFourth(feed_9[i]);
+              }
+          }
+          if (feed_10) {
+              for (i = 0; i < feed_10.length; i++) {
+                  this.adFifth(feed_10[i]);
+              }
+          }
+          if (wrapper_0) {
+          this.adFirst(wrapper_0);
+          }
+          if (wrapper_1) {
+          this.adSecond(wrapper_1);
+          }
+          if (wrapper_2) {
+          this.adThird(wrapper_2);
+          this.adFourth(wrapper_2);
+          }
+         
+          return getProducts;
       },
       relatedAd() {
-          let a = this.$refs.related;
-          return a.insertAdjacentHTML('beforeend', `
+          let wrapper = this.$refs.related;
+
+          wrapper.insertAdjacentHTML('beforeend', `
           <template x-for="(product, index) in products" :key="product.title">
           <div class="ads-item relative col-span-6 md:col-span-3 lg:col-span-2 transition duration-500 ease-ease hover:shadow-lg">
               <div class="ads-item__image relative bg-body-primary">
@@ -4839,10 +4902,12 @@ Expression: "${b}"
               </template>
           </div>
           </template>
-          `), a
+          `);
+      
+          return wrapper;
       },
-      adFirst(a) {
-          return a.insertAdjacentHTML('afterend', `
+      adFirst(wrapper) {            
+          wrapper.insertAdjacentHTML('afterend', `
           <div class="ads-item relative col-span-6 md:col-span-3 lg:col-span-2 transition duration-500 ease-ease hover:shadow-lg">
               <div class="ads-item__image relative bg-body-primary">
                   <a class="ads-item__link" x-bind:href="adFirst.url">
@@ -4873,10 +4938,12 @@ Expression: "${b}"
               </div>
               </template>
           </div>
-          `), a
+          `);
+          
+          return wrapper;
       },
-      adSecond(a) {
-          return a.insertAdjacentHTML('afterend', `
+      adSecond(wrapper) {
+          wrapper.insertAdjacentHTML('afterend', `
           <div class="ads-item relative col-span-6 md:col-span-3 lg:col-span-2 transition duration-500 ease-ease hover:shadow-lg">
               <div class="ads-item__image relative bg-body-primary">
                   <a class="ads-item__link" x-bind:href="adSecond.url">
@@ -4905,10 +4972,12 @@ Expression: "${b}"
               </div>
               </template>
           </div>
-          `), a
+          `);
+          
+          return wrapper;
       },
-      adThird(a) {
-          return a.insertAdjacentHTML('beforebegin', `
+      adThird(wrapper) {
+          wrapper.insertAdjacentHTML('beforebegin', `
           <div class="ads-item relative col-span-6 md:col-span-3 lg:col-span-2 transition duration-500 ease-ease hover:shadow-lg">
               <div class="ads-item__image relative bg-body-primary">
                   <a class="ads-item__link" x-bind:href="adThird.url">
@@ -4937,10 +5006,12 @@ Expression: "${b}"
               </div>
               </template>
           </div>
-          `), a
+          `);
+          
+          return wrapper;
       },
-      adFourth(a) {
-          return a.insertAdjacentHTML('afterend', `
+      adFourth(wrapper) {
+          wrapper.insertAdjacentHTML('afterend', `
           <div class="ads-item relative col-span-6 md:col-span-3 lg:col-span-2 transition duration-500 ease-ease hover:shadow-lg">
               <div class="ads-item__image relative bg-body-primary">
                   <a class="ads-item__link" x-bind:href="adFourth.url">
@@ -4969,10 +5040,12 @@ Expression: "${b}"
               </div>
               </template>
           </div>
-          `), a
+          `);
+          
+          return wrapper;
       },
-      adFifth(a) {
-          return a.insertAdjacentHTML('afterend', `
+      adFifth(wrapper) {
+          wrapper.insertAdjacentHTML('afterend', `
           <div class="ads-item relative col-span-6 md:col-span-3 lg:col-span-2 transition duration-500 ease-ease hover:shadow-lg">
               <div class="ads-item__image relative bg-body-primary">
                   <a class="ads-item__link" x-bind:href="adFifth.url">
@@ -5001,8 +5074,10 @@ Expression: "${b}"
               </div>
               </template>
           </div>
-          `), a
-      }
+          `);
+          
+          return wrapper;
+      },
   }))
 }), document.addEventListener('alpine:init', () => {
   Alpine.data('rivebit', () => ({
