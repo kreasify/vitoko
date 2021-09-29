@@ -5055,7 +5055,7 @@ function myads() {
         const o = async () => {
             const a = await fetch('https://vitoko.netlify.app/ads/index.json');
             a.ok || alert(`Something went wrong: ${a.status} - ${a.statusText}`), data = await a.json(), this.products = data.items, this.adFirst = data.items[0], this.adSecond = data.items[1], this.adThird = data.items[2], this.adFourth = data.items[3], this.adFifth = data.items[4]
-        }, n = document.querySelector(".related-item-0"), m = document.querySelector(".related-item-2"), d = document.querySelector(".related-item-4"), e = document.querySelectorAll(".feed-item-4"), f = document.querySelectorAll(".feed-item-8"), g = document.querySelectorAll(".feed-item-12"), b = document.querySelectorAll(".feed-item-16"), i = document.querySelectorAll(".feed-item-20"), j = document.querySelectorAll(".feed-item-24"), k = document.querySelectorAll(".feed-item-28"), l = document.querySelectorAll(".feed-item-32"), c = document.querySelectorAll(".feed-item-36"), h = document.querySelectorAll(".feed-item-40");
+        }, n = document.querySelector("#related-item-0"), m = document.querySelector("#related-item-2"), d = document.querySelector("#related-item-4"), e = document.querySelectorAll(".feed-item-4"), f = document.querySelectorAll(".feed-item-8"), g = document.querySelectorAll(".feed-item-12"), b = document.querySelectorAll(".feed-item-16"), i = document.querySelectorAll(".feed-item-20"), j = document.querySelectorAll(".feed-item-24"), k = document.querySelectorAll(".feed-item-28"), l = document.querySelectorAll(".feed-item-32"), c = document.querySelectorAll(".feed-item-36"), h = document.querySelectorAll(".feed-item-40");
         let a;
         if (e)
             for (a = 0; a < e.length; a++) this.adFirst(e[a]);
