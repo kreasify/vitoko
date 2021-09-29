@@ -4798,7 +4798,7 @@ Expression: "${b}"
               this.adFifth = data.items[4];
           };
           const wrapper_0 = document.querySelector("#related-item-0");
-          const wrapper_1 = document.querySelector(".related-item-2");
+          const wrapper_1 = document.querySelector("#related-item-2");
           const wrapper_2 = document.querySelector(".related-item-4");
           const feed_1 = document.querySelectorAll(".feed-item-4");
           const feed_2 = document.querySelectorAll(".feed-item-8");
