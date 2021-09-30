@@ -4798,7 +4798,7 @@ Expression: "${b}"
               this.adFifth = data.items[4];
           };
           const wrapper_0 = document.querySelector("#related-item-0");
-          const wrapper_1 = document.querySelector("#related-item-2");
+          const wrapper_1 = document.querySelector(".related-item-2");
           const wrapper_2 = document.querySelector(".related-item-4");
           const feed_1 = document.querySelectorAll(".feed-item-4");
           const feed_2 = document.querySelectorAll(".feed-item-8");
@@ -5490,14 +5490,14 @@ function Storage() {
 }
 document.addEventListener('alpine:init', () => {
   Alpine.data('checkout', () => ({
-      user: {},
+      setting: {},
       shippingId: '',
       activeStyle: !1,
       destination: '',
       couriers: [],
       destinationName: '',
       fetchCourier() {
-          this.destination !== '' && fetch('https://ongkir-' + this.shippingId + '.netlify.app/api/' + this.destination.split(',')[0]).then(a => a.json()).then(a => {
+          this.destination !== '' && fetch('https://ongkir-' + this.setting.kode_asal_pengiriman + '.netlify.app/api/' + this.destination.split(',')[0]).then(a => a.json()).then(a => {
               this.couriers = a.results, this.destinationName = a.destination
           })
       },
