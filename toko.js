@@ -5588,7 +5588,7 @@ document.addEventListener('alpine:init', () => {
                 }
             });
             
-            if (this.$refs.autoComplete {
+            if (this.$refs.autoComplete) {
                 return autoCompleteJS ;
             }
         },
