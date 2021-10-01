@@ -5489,131 +5489,158 @@ function Storage() {
   }
 }
 document.addEventListener('alpine:init', () => {
-  Alpine.data('checkout', () => ({
-      setting: {},
-      shippingId: '',
-      activeStyle: !1,
-      destination: '',
-      couriers: [],
-      destinationName: '',
-      fetchCourier() {
-          this.destination !== '' && fetch('https://ongkir-' + this.setting.kode_asal_pengiriman + '.netlify.app/api/' + this.destination.split(',')[0]).then(a => a.json()).then(a => {
-              this.couriers = a.results, this.destinationName = a.destination
-          })
-      },
-      courierActive: null,
-      courier: '',
-      name: '',
-      hp: '',
-      email: '',
-      address: '',
-      postcode: '',
-      payment: '',
-      paymentActive: null,
-      paymentAccount: '',
-      paymentNumber: '',
-      note: '',
-      init() {
-          const a = new autoComplete({
-              data: {
-                  src: async () => {
-                      try {
-                          this.$refs.autoComplete.setAttribute("placeholder", "Loading...");
-                          const b = await fetch('https://vitoko.netlify.app/api/destination.json'),
-                              c = await b.json();
-                          return this.$refs.autoComplete.setAttribute("placeholder", a.placeHolder), c
-                      } catch (a) {
-                          return a
-                      }
-                  },
-                  keys: ["id", "name"],
-                  cache: !1,
-                  filter: a => {
-                      const b = Array.from(new Set(a.map(a => a.match))).map(b => a.find(a => a.match === b));
-                      return b
-                  }
-              },
-              placeHolder: "Masukkan Kecamatan",
-              resultsList: {
-                  class: "results__list list-none bg-body-secondary transition-all duration-500 ease-ease pl-0",
-                  element: (a, b) => {
-                      a.setAttribute("data-parent", "name-list")
-                  },
-                  noResults: !0,
-                  maxResults: 15,
-                  tabSelect: !0
-              },
-              resultItem: {
-                  class: "autoComplete__result text-sm text-body-text hover:bg-body truncate group hover:border-l-2 hover:border-r-2 hover:border-solid hover:border-primary py-1 px-3 mb-0",
-                  element: (a, b) => {
-                      a.innerHTML = `
-                      <span class="truncate">
-                      ${b.match}
-                      </span>`
-                  },
-                  highlight: "autoComplete_highlight text-primary bg-transparent",
-                  selected: "autoComplete_selected bg-body border-l-2 border-r-2 border-solid border-primary"
-              },
-              events: {
-                  input: {
-                      focus: () => {
-                          a.input.value.length && a.start()
-                      },
-                      selection: () => {
-                          const a = event.detail,
-                              b = a.selection.value.name,
-                              c = a.selection.value.id + ', ' + a.selection.value.name;
-                          this.$refs.autoComplete.setAttribute("placeholder", b), this.$refs.autoComplete.value = b, this.activeStyle = !0, this.destination = c, this.fetchCourier(), this.courier = '', this.courierActive = null, event.preventDefault(), console.log(event.detail)
-                      }
-                  }
-              }
-          });
-          return a
-      },
-      localPrice(a) {
-          return a.toLocaleString('id-ID', {
-              style: 'currency',
-              currency: 'IDR',
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0
-          })
-      },
-      getTime() {
-          const a = new Date,
-              b = {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit"
-              },
-              c = [a.toLocaleString("id-ID", b)];
-          return c
-      },
-      getCourier() {
-          const a = this.courier.split(',')[0],
-              b = a.replace(/&/g, "n");
-          return b
-      },
-      sendWa(c, a, b) {
-          const d = `Hi%20kak%20${this.user.name}%2C%20saya%20mau%20order%20produk%20di%20toko%20${this.user.shop_name}%20dengan%20rincian%20berikut%2C%0A%0A`,
-              e = `*Nama*%20%20%20%20%20%20%3A%20${this.name}%20%0A`,
-              f = `*Nomor%20HP*%20%3A%20${this.hp}%20%0A`,
-              g = `*Email*%20%20%20%20%20%20%20%3A%20${this.email}%20%0A`,
-              h = ', Kec. ' + this.destination.split(',')[1] + ', ' + this.destination.split(',')[2] + ', ' + this.destination.split(',')[3],
-              i = `*Alamat*%20%20%20%20%3A%20${this.address}%20${h}%20${this.postcode}%0A`,
-              j = `*Pembayaran*%20%20%3A%20${this.paymentNumber}%20a/n%20${this.paymentAccount}%20(${this.payment})%0A`,
-              k = `*Waktu%20%20%20%20%20%20%20%3A%20${this.getTime()}%0A`,
-              l = `*Catatan*%20%20%3A%20${this.note}%0A%0A`,
-              m = `${c.map((a,b)=>a.summary='%0A*'+a.qty+'x*%20'+a.name+'%20*'+a.size+'*%20%0A_@'+this.localPrice(a.price)+'_%20%20%3D%3D%3E%20%20%20%20%20%20%20%20%20'+this.localPrice(a.price*a.qty)).join('%0A')}`,
-              n = `Rincian%20Pesanan%2C%0A_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_${m}%0A_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%2B%0A`,
-              o = `*Subtotal*%20%20%20%20%20%20%20%3A%20${this.localPrice(a)}%0A`,
-              p = `*Kurir*%20%20%20%20%20%20%20%3A%20${this.courier!==''?this.getCourier()+' - '+this.localPrice(parseInt(this.courier.split(',')[1])):''}%0A`,
-              q = `*Ongkir*%20%20%20%20%20%20%20%20%20%3A%20${this.courier!==''?this.localPrice(parseInt(this.courier.split(',')[1])*b):'belum ada kurir'}%0A`,
-              r = `*Total%20Pembayaran%20%20%20${this.courier!==''?this.localPrice(a+parseInt(this.courier.split(',')[1])*b):this.localPrice(a)}*`,
-              s = `https://api.whatsapp.com/send?phone=${this.user.whatsapp}&text=${d}${e}${f}${g}${i}${j}${p}${k}${l}${n}${o}${q}${r}`;
-          this.name !== '' && this.hp !== '' && this.email !== '' && this.address !== '' && this.destination !== '' && window.open(s)
-      }
-  }))
+    Alpine.data('checkout', () => ({
+        user: {},
+        activeStyle: false,
+        destination: '',
+        couriers: [],
+        destinationName: '',
+        fetchCourier() {
+            if (this.destination !== '') {
+                fetch('https://ongkir-' + this.user.kode_asal_pengiriman + '.netlify.app/api/' + this.destination.split(',')[0])
+                    .then(response => response.json())
+                    .then(data => {
+                        this.couriers = data.results, this.destinationName = data.destination
+                    })
+            }
+        },
+        courierActive: null,
+        courier: '',
+        name: '',
+        hp: '',
+        email: '',
+        address: '',
+        postcode: '',
+        payment: '',
+        paymentActive: null,
+        paymentAccount: '',
+        paymentNumber: '',
+        note: '',
+        init() {
+            const autoCompleteJS = new autoComplete({
+                data: {
+                    src: async () => {
+                        try {
+                            this.$refs.autoComplete.setAttribute("placeholder", "Loading...");
+                            const source = await fetch(
+                                "/api/destination.json"
+                            );
+                            const data = await source.json();
+                            this.$refs.autoComplete.setAttribute("placeholder", autoCompleteJS.placeHolder);
+                            return data;
+                        } catch (error) {
+                            return error;
+                        }
+                    },
+                    keys: ["id", "name"],
+                    cache: false,
+                    filter: (list) => {
+                        const filteredResults = Array.from(
+                            new Set(list.map((value) => value.match))
+                        ).map((id) => {
+                            return list.find((value) => value.match === id);
+                        });
+
+                        return filteredResults;
+                    }
+                },
+                placeHolder: "Masukkan Kecamatan",
+                resultsList: {
+                    class: "results__list list-none bg-body-secondary transition-all duration-500 ease-ease pl-0",
+                    element: (list, data) => {
+                        list.setAttribute("data-parent", "name-list");
+                    },
+                    noResults: true,
+                    maxResults: 15,
+                    tabSelect: true
+                },
+                resultItem: {
+                    class: "autoComplete__result text-sm text-body-text hover:bg-body truncate group hover:border-l-2 hover:border-r-2 hover:border-solid hover:border-primary py-1 px-3 mb-0",
+                    element: (item, data) => {
+                        // Modify Results Item Content
+                        item.innerHTML = `
+                        <span class="truncate">
+                        ${data.match}
+                        </span>`;
+                    },
+                    highlight: "autoComplete_highlight text-primary bg-transparent",
+                    selected: "autoComplete_selected bg-body border-l-2 border-r-2 border-solid border-primary"
+                },
+                events: {
+                    input: {
+                        focus: () => {
+                            if (autoCompleteJS.input.value.length) autoCompleteJS.start();
+                        },
+                        selection: () => {
+                            const feedback = event.detail;
+                            const selection = feedback.selection.value.name;
+                            const toDestination = feedback.selection.value.id + ', ' + feedback.selection.value.name;
+                            this.$refs.autoComplete.setAttribute("placeholder", selection);
+                            this.$refs.autoComplete.value = selection;
+                            this.activeStyle = true;
+                            this.destination = toDestination;
+                            this.fetchCourier();
+                            this.courier = '';
+                            this.courierActive = null;
+                            event.preventDefault();
+                            
+                            console.log(event.detail);
+                        }
+                    },
+                }
+            });
+            if (this.$refs.autoComplete) {
+                return autoCompleteJS ;
+            }
+        },
+        localPrice(amount) {
+            return amount.toLocaleString('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        },
+        getTime() {
+            const d = new Date();
+            const options = {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            };
+            const timeOrder = [d.toLocaleString("id-ID", options)];
+            return timeOrder;
+        },
+        getCourier() {
+            const kurir = this.courier.split(',')[0];
+            const newKurir = kurir.replace(/&/g, "n");
+            return newKurir;
+        },
+        sendWa(products, subtotal, berat) {
+            const header = `Hi%20kak%20${this.user.name}%2C%20saya%20mau%20order%20produk%20di%20toko%20${this.user.shop_name}%20dengan%20rincian%20berikut%2C%0A%0A`
+            const name = `*Nama*%20%20%20%20%20%20%3A%20${this.name}%20%0A`;
+            const hp = `*Nomor%20HP*%20%3A%20${this.hp}%20%0A`;
+            const email = `*Email*%20%20%20%20%20%20%20%3A%20${this.email}%20%0A`;
+            const district = ', Kec. ' + this.destination.split(',')[1] + ', ' + this.destination.split(',')[2] + ', ' + this.destination.split(',')[3];
+            const address = `*Alamat*%20%20%20%20%3A%20${this.address}%20${district}%20${this.postcode}%0A`;
+            const pembayaran = `*Pembayaran*%20%20%3A%20${this.paymentNumber}%20a/n%20${this.paymentAccount}%20(${this.payment})%0A`;
+            const waktu = `*Waktu%20%20%20%20%20%20%20%3A%20${this.getTime()}%0A`;
+            const catatan = `*Catatan*%20%20%3A%20${this.note}%0A%0A`;
+            const produk = `${products.map((product, index) => product.summary = '%0A*' + product.qty + 'x*%20' + product.name + '%20*' + product.size + '*%20%0A_@' + this.localPrice(product.price) + '_%20%20%3D%3D%3E%20%20%20%20%20%20%20%20%20' + this.localPrice(product.price * product.qty)).join('%0A')}`;
+            const product_list = `Rincian%20Pesanan%2C%0A_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_${produk}%0A_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%20_%2B%0A`;
+            const sub_total = `*Subtotal*%20%20%20%20%20%20%20%3A%20${this.localPrice(subtotal)}%0A`;
+            const kurir = `*Kurir*%20%20%20%20%20%20%20%3A%20${this.courier !== '' ? this.getCourier() + ' - ' + this.localPrice(parseInt(this.courier.split(',')[1])) : '' }%0A`;
+            const ongkir = `*Ongkir*%20%20%20%20%20%20%20%20%20%3A%20${this.courier !== '' ? this.localPrice(parseInt(this.courier.split(',')[1]) * berat) : 'belum ada kurir'}%0A`;
+            const total_bayar = `*Total%20Pembayaran%20%20%20${this.courier !== '' ? this.localPrice(subtotal + (parseInt(this.courier.split(',')[1]) * berat )) : this.localPrice(subtotal)}*`;
+            const link = `https://api.whatsapp.com/send?phone=${this.user.whatsapp}&text=${header}${name}${hp}${email}${address}${pembayaran}${kurir}${waktu}${catatan}${product_list}${sub_total}${ongkir}${total_bayar}`;
+            
+            if ((this.name !== '') && (this.hp !== '') && (this.email !== '') && (this.address !== '') && (this.destination !== '')) {
+                window.open(link);
+            }
+        },
+    })
+    )
 })
