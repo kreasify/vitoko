@@ -5587,7 +5587,10 @@ document.addEventListener('alpine:init', () => {
                     },
                 }
             });
-            return autoCompleteJS ;
+            
+            if (this.$refs.autoComplete {
+                return autoCompleteJS ;
+            }
         },
         localPrice(amount) {
             return amount.toLocaleString('id-ID', {
