@@ -5522,18 +5522,24 @@ document.addEventListener('alpine:init', () => {
                     src: async () => {
                         try {
                             this.$refs.autoComplete.setAttribute("placeholder", "Loading...");
-                            const b = await fetch('https://vitoko.netlify.app/api/destination.json'),
-                                c = await b.json();
-                            return this.$refs.autoComplete.setAttribute("placeholder", a.placeHolder), c
-                        } catch (a) {
-                            return a
+                            const source = await fetch('https://vitoko.netlify.app/api/destination.json');
+                            const data = await source.json();
+                            this.$refs.autoComplete.setAttribute("placeholder", autoCompleteJS.placeHolder);
+                            return data;
+                        } catch (error) {
+                            return error;
                         }
                     },
                     keys: ["id", "name"],
-                    cache: !1,
-                    filter: a => {
-                        const b = Array.from(new Set(a.map(a => a.match))).map(b => a.find(a => a.match === b));
-                        return b
+                    cache: false,
+                    filter: (list) => {
+                        const filteredResults = Array.from(
+                            new Set(list.map((value) => value.match))
+                        ).map((id) => {
+                            return list.find((value) => value.match === id);
+                        });
+
+                        return filteredResults;
                     }
                 },
                 placeHolder: "Masukkan Kecamatan",
@@ -5581,9 +5587,7 @@ document.addEventListener('alpine:init', () => {
                     },
                 }
             });
-            if (this.$refs.autoComplete) {
-                return autoCompleteJS ;
-            }
+            return autoCompleteJS ;
         },
         localPrice(amount) {
             return amount.toLocaleString('id-ID', {
@@ -5636,3 +5640,4 @@ document.addEventListener('alpine:init', () => {
     })
     )
 })
+    
