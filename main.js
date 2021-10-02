@@ -5619,7 +5619,8 @@ document.addEventListener('alpine:init', () => {
             return newKurir;
         },
         sendWa(products, subtotal, berat) {
-            const header = `Hi%20kak%20${this.user.name}%2C%20saya%20mau%20order%20produk%20di%20toko%20${this.user.shop_name}%20dengan%20rincian%20berikut%2C%0A%0A`
+            const whatsapp = (this.user.whatsapp).toString().replace(/\D/g, '').replace(new RegExp('^0'), '62').replace(new RegExp('^8'), '628');
+            const header = `Hi%20kak%20${this.user.nama}%2C%20saya%20mau%20order%20produk%20di%20toko%20${this.user.toko}%20dengan%20rincian%20berikut%2C%0A%0A`
             const name = `*Nama*%20%20%20%20%20%20%3A%20${this.name}%20%0A`;
             const hp = `*Nomor%20HP*%20%3A%20${this.hp}%20%0A`;
             const email = `*Email*%20%20%20%20%20%20%20%3A%20${this.email}%20%0A`;
@@ -5634,7 +5635,7 @@ document.addEventListener('alpine:init', () => {
             const kurir = `*Kurir*%20%20%20%20%20%20%20%3A%20${this.courier !== '' ? this.getCourier() + ' - ' + this.localPrice(parseInt(this.courier.split(',')[1])) : '' }%0A`;
             const ongkir = `*Ongkir*%20%20%20%20%20%20%20%20%20%3A%20${this.courier !== '' ? this.localPrice(parseInt(this.courier.split(',')[1]) * berat) : 'belum ada kurir'}%0A`;
             const total_bayar = `*Total%20Pembayaran%20%20%20${this.courier !== '' ? this.localPrice(subtotal + (parseInt(this.courier.split(',')[1]) * berat )) : this.localPrice(subtotal)}*`;
-            const link = `https://api.whatsapp.com/send?phone=${this.user.whatsapp}&text=${header}${name}${hp}${email}${address}${pembayaran}${kurir}${waktu}${catatan}${product_list}${sub_total}${ongkir}${total_bayar}`;
+            const link = `https://api.whatsapp.com/send?phone=${whatsapp}&text=${header}${name}${hp}${email}${address}${pembayaran}${kurir}${waktu}${catatan}${product_list}${sub_total}${ongkir}${total_bayar}`;
             
             if ((this.name !== '') && (this.hp !== '') && (this.email !== '') && (this.address !== '') && (this.destination !== '')) {
                 window.open(link);
